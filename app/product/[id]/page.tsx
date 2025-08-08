@@ -2,77 +2,313 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState, use } from "react"
+import { useState, use } from "react"
 import { ArrowLeft, Heart, Share2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { PriceQuoteModal } from "@/components/price-quote-modal"
 import { ShareModal } from "@/components/share-modal"
 
-interface ProductDetails {
-  id: number
-  name: string
-  category: string
-  images: string[]
-  description: string
-  features: string[]
-  specifications: Record<string, string>
-  colors: string[]
-  sizes: string[]
+const products = {
+  1: {
+    id: 1,
+    name: "Ürün 1",
+    images: ["/IMG-20250807-WA0017.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  2: {
+    id: 2,
+    name: "Ürün 2",
+    images: ["/IMG-20250807-WA0018.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  3: {
+    id: 3,
+    name: "Ürün 3",
+    images: ["/IMG-20250807-WA0019.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  4: {
+    id: 4,
+    name: "Ürün 4",
+    images: ["/IMG-20250807-WA0020.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  5: {
+    id: 5,
+    name: "Ürün 5",
+    images: ["/IMG-20250807-WA0021.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  6: {
+    id: 6,
+    name: "Ürün 6",
+    images: ["/IMG-20250807-WA0022.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  7: {
+    id: 7,
+    name: "Ürün 7",
+    images: ["/IMG-20250807-WA0023.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  8: {
+    id: 8,
+    name: "Ürün 8",
+    images: ["/IMG-20250807-WA0024.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  9: {
+    id: 9,
+    name: "Ürün 9",
+    images: ["/IMG-20250807-WA0025.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  10: {
+    id: 10,
+    name: "Ürün 10",
+    images: ["/IMG-20250807-WA0026.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  11: {
+    id: 11,
+    name: "Ürün 11",
+    images: ["/IMG-20250807-WA0027.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  12: {
+    id: 12,
+    name: "Ürün 12",
+    images: ["/IMG-20250807-WA0028.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  13: {
+    id: 13,
+    name: "Ürün 13",
+    images: ["/IMG-20250807-WA0029.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  14: {
+    id: 14,
+    name: "Ürün 14",
+    images: ["/IMG-20250807-WA0030.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  15: {
+    id: 15,
+    name: "Ürün 15",
+    images: ["/IMG-20250807-WA0031.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  16: {
+    id: 16,
+    name: "Ürün 16",
+    images: ["/IMG-20250807-WA0032.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  17: {
+    id: 17,
+    name: "Ürün 17",
+    images: ["/IMG-20250807-WA0033.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  18: {
+    id: 18,
+    name: "Ürün 18",
+    images: ["/IMG-20250807-WA0034.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  19: {
+    id: 19,
+    name: "Ürün 19",
+    images: ["/IMG-20250807-WA0035.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  20: {
+    id: 20,
+    name: "Ürün 20",
+    images: ["/IMG-20250807-WA0036.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  21: {
+    id: 21,
+    name: "Ürün 21",
+    images: ["/IMG-20250807-WA0037.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  22: {
+    id: 22,
+    name: "Ürün 22",
+    images: ["/IMG-20250807-WA0038.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  23: {
+    id: 23,
+    name: "Ürün 23",
+    images: ["/IMG-20250807-WA0039.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  24: {
+    id: 24,
+    name: "Ürün 24",
+    images: ["/IMG-20250807-WA0040.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  25: {
+    id: 25,
+    name: "Ürün 25",
+    images: ["/IMG-20250807-WA0041.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  26: {
+    id: 26,
+    name: "Ürün 26",
+    images: ["/IMG-20250807-WA0042.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  27: {
+    id: 27,
+    name: "Ürün 27",
+    images: ["/IMG-20250807-WA0043.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  28: {
+    id: 28,
+    name: "Ürün 28",
+    images: ["/IMG-20250807-WA0044.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  29: {
+    id: 29,
+    name: "Ürün 29",
+    images: ["/IMG-20250807-WA0045.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  30: {
+    id: 30,
+    name: "Ürün 30",
+    images: ["/IMG-20250807-WA0046.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  31: {
+    id: 31,
+    name: "Ürün 31",
+    images: ["/IMG-20250807-WA0047.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  32: {
+    id: 32,
+    name: "Ürün 32",
+    images: ["/IMG-20250807-WA0048.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  33: {
+    id: 33,
+    name: "Ürün 33",
+    images: ["/IMG-20250807-WA0049.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  34: {
+    id: 34,
+    name: "Ürün 34",
+    images: ["/IMG-20250807-WA0050.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  35: {
+    id: 35,
+    name: "Ürün 35",
+    images: ["/IMG-20250807-WA0051.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  36: {
+    id: 36,
+    name: "Ürün 36",
+    images: ["/IMG-20250807-WA0052.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  37: {
+    id: 37,
+    name: "Ürün 37",
+    images: ["/IMG-20250807-WA0053.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  38: {
+    id: 38,
+    name: "Ürün 38",
+    images: ["/IMG-20250807-WA0054.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  39: {
+    id: 39,
+    name: "Ürün 39",
+    images: ["/IMG-20250807-WA0055.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  40: {
+    id: 40,
+    name: "Ürün 40",
+    images: ["/IMG-20250807-WA0056.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  41: {
+    id: 41,
+    name: "Ürün 41",
+    images: ["/IMG-20250807-WA0057.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  42: {
+    id: 42,
+    name: "Ürün 42",
+    images: ["/IMG-20250807-WA0058.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  43: {
+    id: 43,
+    name: "Ürün 43",
+    images: ["/IMG-20250807-WA0059.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  44: {
+    id: 44,
+    name: "Ürün 44",
+    images: ["/IMG-20250807-WA0060.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  45: {
+    id: 45,
+    name: "Ürün 45",
+    images: ["/IMG-20250807-WA0062.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  46: {
+    id: 46,
+    name: "Ürün 46",
+    images: ["/IMG-20250807-WA0064.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  47: {
+    id: 47,
+    name: "Ürün 47",
+    images: ["/IMG-20250807-WA0066.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  },
+  48: {
+    id: 48,
+    name: "Ürün 48",
+    images: ["/IMG-20250807-WA0068.jpg"],
+    description: "Bu ürün hakkında kısa bir açıklama."
+  }
 }
 
 export default function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
   const [showPriceModal, setShowPriceModal] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
   const [selectedImage, setSelectedImage] = useState(0)
-  const [product, setProduct] = useState<ProductDetails | null>(null)
-  const [loading, setLoading] = useState(true)
-
+  
   const resolvedParams = use(params)
   const productId = parseInt(resolvedParams.id)
-
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true)
-      try {
-        const res = await fetch(`/api/products/${productId}`, { cache: 'no-store' })
-        if (res.ok) {
-          const p = await res.json()
-          const transformed: ProductDetails = {
-            id: p.id,
-            name: p.name,
-            category: p.category,
-            images: [p.image || '/placeholder.svg'],
-            description: p.description,
-            features: Array.isArray(p.features) ? p.features : [],
-            specifications: p.specifications || {},
-            colors: Array.isArray(p.colors) ? p.colors : [],
-            sizes: Array.isArray(p.sizes) ? p.sizes : [],
-          }
-          setProduct(transformed)
-        } else {
-          setProduct(null)
-        }
-      } catch {
-        setProduct(null)
-      } finally {
-        setLoading(false)
-      }
-    }
-    load()
-  }, [productId])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold text-gray-900">Yükleniyor...</h1>
-        </div>
-      </div>
-    )
-  }
-
+  const product = products[productId as keyof typeof products]
+  
   if (!product) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -142,7 +378,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
           <div className="space-y-4">
             <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100">
               <Image
-                 src={product.images[selectedImage] || "/placeholder.svg"}
+                src={product.images[selectedImage] || "/placeholder.svg"}
                 alt={product.name}
                 width={800}
                 height={600}
@@ -151,7 +387,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
               />
             </div>
             <div className="grid grid-cols-4 gap-4">
-                {product.images.map((image: string, index: number) => (
+              {product.images.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
@@ -182,52 +418,9 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
               <p className="text-lg text-gray-600 leading-relaxed">{product.description}</p>
             </div>
 
-            {/* Features */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-black">Özellikler</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {product.features.map((feature: string, index: number) => (
-                  <div key={index} className="p-3 bg-gray-50 rounded-lg">
-                    <span className="text-gray-700 font-medium">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Colors */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-black">Renk Seçenekleri</h3>
-              <div className="flex flex-wrap gap-3">
-                {product.colors.map((color: string, index: number) => (
-                  <div key={index} className="px-6 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:border-black transition-colors cursor-pointer">
-                    {color}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Sizes */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-black">Boyut Seçenekleri</h3>
-              <div className="flex flex-wrap gap-3">
-                {product.sizes.map((size: string, index: number) => (
-                  <div key={index} className="px-6 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:border-black transition-colors cursor-pointer">
-                    {size}
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Action Buttons */}
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg" 
-                  className="bg-black hover:bg-gray-800 text-white flex-1"
-                  onClick={() => setShowPriceModal(true)}
-                >
-                  Fiyat Teklifi Al
-                </Button>
                 <Button 
                   size="lg" 
                   variant="outline" 
@@ -250,10 +443,10 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold text-black mb-6">Teknik Özellikler</h3>
               <div className="grid md:grid-cols-2 gap-6">
-                {Object.entries(product.specifications as Record<string, string>).map(([key, value]: [string, string], index: number) => (
+                {Object.entries(product.specifications).map(([key, value], index) => (
                   <div key={index} className="flex justify-between items-center py-4 border-b border-gray-100 last:border-b-0">
                     <span className="font-bold text-black">{key}</span>
-                    <span className="text-gray-700">{String(value)}</span>
+                    <span className="text-gray-700">{value}</span>
                   </div>
                 ))}
               </div>
@@ -273,13 +466,6 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
       </div>
 
       {/* Modals */}
-      <PriceQuoteModal
-        isOpen={showPriceModal}
-        onClose={() => setShowPriceModal(false)}
-        productName={product.name}
-        productId={product.id}
-      />
-      
       <ShareModal
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
