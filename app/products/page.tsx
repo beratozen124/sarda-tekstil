@@ -11,45 +11,86 @@ import { ImageWithFallback } from "@/components/image-with-fallback"
 import { LoadingCard, LoadingSpinner } from "@/components/loading-spinner"
 import { ErrorBoundary } from "@/components/error-boundary"
 
-interface ListProduct {
-  id: number
-  name: string
-  category: string
-  image: string
-  description: string
-}
-
-const defaultProducts: ListProduct[] = []
+const defaultProducts = [
+  {
+    id: 1,
+    name: "Klasik Kilim Koleksiyonu",
+    category: "Kilim",
+    price: "₺2,500 - ₺8,000",
+    image: "/placeholder-j5i2h.png",
+    description: "Geleneksel Anadolu motifleri ile modern tasarımın buluştuğu özel koleksiyon."
+  },
+  {
+    id: 2,
+    name: "Modern Bukle Serisi",
+    category: "Bukle",
+    price: "₺1,800 - ₺5,500",
+    image: "/neutral-boucle-fabric.png",
+    description: "Çağdaş yaşam alanları için tasarlanmış premium bukle kumaşlar."
+  },
+  {
+    id: 3,
+    name: "Vintage Kilim Koleksiyonu",
+    category: "Kilim",
+    price: "₺3,200 - ₺9,500",
+    image: "/vintage-kilim-rug.png",
+    description: "Zamansız güzelliği modern yaşam alanlarına taşıyan vintage kilimler."
+  },
+  {
+    id: 4,
+    name: "Premium Bukle Kumaş",
+    category: "Bukle",
+    price: "₺2,100 - ₺6,200",
+    image: "/premium-boucle-fabric.png",
+    description: "Yüksek kaliteli elyaflardan üretilen premium bukle kumaş serisi."
+  },
+  {
+    id: 5,
+    name: "Etnik Kilim Desenler",
+    category: "Kilim",
+    price: "₺2,800 - ₺8,500",
+    image: "/ethnic-kilim-rug.png",
+    description: "Anadolu'nun zengin kültürel mirasını yansıtan etnik desenler."
+  },
+  {
+    id: 6,
+    name: "Nötr Bukle Koleksiyonu",
+    category: "Bukle",
+    price: "₺1,900 - ₺5,800",
+    image: "/neutral-boucle-fabric.png",
+    description: "Her dekorasyon tarzına uyum sağlayan nötr renk bukle kumaşlar."
+  }
+]
 
 function ProductsContent() {
-  const [products, setProducts] = useState<ListProduct[]>(defaultProducts)
-  const [filteredProducts, setFilteredProducts] = useState<ListProduct[]>(defaultProducts)
+  const [products, setProducts] = useState(defaultProducts)
+  const [filteredProducts, setFilteredProducts] = useState(defaultProducts)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Tümü')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const load = async () => {
-      setIsLoading(true)
-      try {
-        const res = await fetch('/api/products', { cache: 'no-store' })
-        if (res.ok) {
-          const apiProducts = await res.json()
-          setProducts(apiProducts)
-          setFilteredProducts(apiProducts)
-        } else {
-          setProducts(defaultProducts)
-          setFilteredProducts(defaultProducts)
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
+
+    // Load products from localStorage if available
+    try {
+      const savedProducts = localStorage.getItem('sarda-products')
+      if (savedProducts) {
+        const parsedProducts = JSON.parse(savedProducts)
+        if (parsedProducts.length > 0) {
+          setProducts([...defaultProducts, ...parsedProducts])
+          setFilteredProducts([...defaultProducts, ...parsedProducts])
         }
-      } catch {
-        setProducts(defaultProducts)
-        setFilteredProducts(defaultProducts)
-      } finally {
-        setIsLoading(false)
       }
+    } catch (error) {
+      console.error('Error loading products from localStorage:', error)
     }
-    load()
+
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
@@ -71,7 +112,7 @@ function ProductsContent() {
     setFilteredProducts(filtered)
   }, [products, selectedCategory, searchTerm])
 
-  const categories = ['Tümü', 'Kilim', 'Bukle']
+  // Kategori filtre butonlarını ve 'Tümü' butonunu tamamen kaldır
 
   if (isLoading) {
     return (
@@ -176,16 +217,7 @@ function ProductsContent() {
 
           {/* Category Filter */}
           <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                onClick={() => setSelectedCategory(category)}
-                className={selectedCategory === category ? "bg-black hover:bg-gray-800 text-white" : "border-gray-300 hover:border-black"}
-              >
-                {category}
-              </Button>
-            ))}
+            {/* Kategori filtre butonlarını ve 'Tümü' butonunu tamamen kaldır */}
           </div>
 
           {/* View Mode Toggle */}
@@ -254,7 +286,9 @@ function ProductsContent() {
                     <p className="text-gray-600 text-sm leading-relaxed">
                       {product.description}
                     </p>
-                    {/* Fiyat etiketleri kaldırıldı */}
+                    {/* <p className="text-lg font-semibold text-black">
+                      {product.price}
+                    </p> */}
                   </div>
                   
                   <div className="pt-4 mt-auto">
